@@ -1,11 +1,11 @@
-import datetime
-import db
-from click import DateTime
-from traitlets import ValidateHandler
-
+from datetime import datetime
+from sqlalchemy import DateTime
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
+from config import db
 
 class Power(db.Model):
-    _tablename_ = 'powers'
+    # _tablename_ = 'powers'
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(256),nullable = False)
@@ -13,9 +13,9 @@ class Power(db.Model):
     created_at = db.Column(DateTime, default = datetime.utcnow)
     updated_at = db.Column(DateTime, default = datetime.utcnow, onupdate = datetime.utcnow)
 
-    heroes = db.relationship('Hero', secondary='heroPowers', back_populates='powers')
+    heros= db.relationship('heroPower', backref= db.backref('powers'))
 
-    @ValidateHandler('description')
+    @validates('description')
     def validate_description(self, key, value):
         if not value:
             raise ValueError("Description should be present.")

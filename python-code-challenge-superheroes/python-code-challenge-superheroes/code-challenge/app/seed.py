@@ -1,14 +1,12 @@
-from aifc import _File
-import os
 import sys
-
-
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(_File), '..')))
-from app.config import db
-from app.hero import  Hero
-from app.power import Power
-from app.heropower import HeroPower
-from app.app import app
+import os
+# Adjust the path to the parent directory
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+from config import db
+from hero import  Hero
+from power import Power
+from heroPower import heroPower
+from app import app
 
 import random
 
@@ -53,7 +51,7 @@ with app.app_context():
  for hero in heroes:
     for _ in range(random.randint(1, 4)):
         power = Power.query.order_by(db.func.random()).first()
-        hero_power = HeroPower(hero_id=hero.id, power_id=power.id, strength=random.choice(strengths))
+        hero_power = heroPower(hero_id=hero.id, power_id=power.id, strength=random.choice(strengths))
         db.session.add(hero_power)
 
 

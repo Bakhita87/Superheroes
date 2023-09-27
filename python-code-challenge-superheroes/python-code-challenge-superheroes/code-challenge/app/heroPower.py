@@ -1,11 +1,12 @@
-import datetime
-from wsgiref import validate
-from click import DateTime
-import db
+from datetime import datetime
+from sqlalchemy import DateTime
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy.orm import validates
+from config import db
 
 
 class heroPower(db.Model):
-    _tablename_ = 'heroPowers'
+    # _tablename_ = 'heroPowers'
 
     id = db.Column(db.Integer, primary_key=True)
     strength = db.Column(db.String)
@@ -14,6 +15,7 @@ class heroPower(db.Model):
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
+   
     
     def _init_(self, strength, power, hero):  
         self.strength = strength
@@ -24,7 +26,7 @@ class heroPower(db.Model):
     def _repr_(self):
         return f'<Hero(name={self.name}, super_name={self.super_name})>'
 
-    @validate('strength')
+    @validates('strength')
     def validate_strength(self, key, value):
         strengths = ['Weak', 'Strong', 'Average']
         if not value:
