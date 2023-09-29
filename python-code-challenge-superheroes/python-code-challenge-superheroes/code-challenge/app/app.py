@@ -24,36 +24,52 @@ def home():
 
 @app.route('/heroes', methods=['GET'])
 def get_heroes():
-    heroes = Hero.query.all()
-    heroes_list = [
-        {
-            "id": hero.id,
+    # heroes = Hero.query.all()
+    # heroes_list = [
+    #     {
+    #         "id": heroes.id,
+    #         "name": heroes.name,
+    #         "super_name": heroes.super_name
+    #     }
+    #     for hero in heroes
+    # ]
+    heroes = []
+    for hero in Hero.query.all():
+        heroes_data = {
+            "id" : hero.id,
             "name": hero.name,
-            "super_name": hero.super_name
+            "super_name": hero.super_name,
         }
-        for hero in heroes
-    ]
-    return jsonify(heroes_list)
+        heroes.append(heroes_data)
+    return jsonify(heroes)
 
 @app.route('/heroes/<int:id>', methods=['GET'])
 def get_hero_by_id(id):
     hero = Hero.query.get(id)
     if hero is None:
         return jsonify({"error": "Hero does not exist"}), 404
-    hero_powers_list = [
-        {
-            "id": power.id,
-            "name": power.name,
-            "description": power.description
-        }
-        for power in hero.powers
-    ]
+    # hero_powers_list = [
+    #     {
+    #         "id": power.id,
+    #         "name": power.name,
+    #         "description": power.description
+    #     }
+    #     for power in hero.powers
+    # ]
     hero_data = {
         "id": hero.id,
         "name": hero.name,
         "super_name": hero.super_name,
-        "powers": hero_powers_list
+        "powers": []
     }
+    for power in hero.powers:
+        pwr = db.session.get(Power,power.power_id)
+        hero_powers_list = {
+                "id": pwr.id,
+                "name": pwr.name,
+                "description": pwr.description
+            }
+        hero_data ["powers"].append(hero_powers_list)
     return jsonify(hero_data)
 
 @app.route('/powers', methods=['GET'])
@@ -105,5 +121,6 @@ def update_power(id):
 
 
 
-if __name__ == '_main_':
-    app.run(port=5555)
+if __name__ == '__main__':
+
+   app.run(port=5554)

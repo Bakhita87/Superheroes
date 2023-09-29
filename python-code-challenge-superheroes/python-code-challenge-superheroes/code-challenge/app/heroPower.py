@@ -10,8 +10,8 @@ class heroPower(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     strength = db.Column(db.String)
-    hero_id = db.Column(db.Integer, db.ForeignKey('heroes.id'))
-    power_id = db.Column(db.Integer, db.ForeignKey('powers.id'))
+    hero_id = db.Column(db.Integer, db.ForeignKey('hero.id'))
+    power_id = db.Column(db.Integer, db.ForeignKey('power.id'))
     created_at = db.Column(DateTime, default=datetime.utcnow)
     updated_at = db.Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
 
